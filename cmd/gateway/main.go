@@ -23,7 +23,7 @@ func main() {
 	adapter := influxdb.New(url, token)
 
 	http.HandleFunc("/", handler(adapter))
-	http.ListenAndServe(":8090", nil)
+	http.ListenAndServe(":8080", nil)
 }
 
 func handler(adapter ruuvi.DatabaseAdapter) http.HandlerFunc {
