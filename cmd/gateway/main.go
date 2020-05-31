@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/majori/ruuvitag-gateway/internal/adapters/influxdb"
+	"github.com/majori/ruuvitag-gateway/internal/adapters/influxdb2"
 	"github.com/majori/ruuvitag-gateway/internal/ruuvi"
 )
 
@@ -20,7 +20,7 @@ func main() {
 		panic(`"INFLUXDB_TOKEN" missing`)
 	}
 
-	adapter := influxdb.New(url, token)
+	adapter := influxdb2.New(url, token)
 
 	http.HandleFunc("/", handler(adapter))
 	http.ListenAndServe(":8080", nil)

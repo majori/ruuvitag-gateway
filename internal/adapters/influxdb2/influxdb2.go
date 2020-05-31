@@ -1,4 +1,4 @@
-package influxdb
+package influxdb2
 
 import (
 	"context"
@@ -9,20 +9,20 @@ import (
 	"github.com/majori/ruuvitag-gateway/internal/ruuvi"
 )
 
-type InfluxDBAdapter struct {
+type InfluxDB2Adapter struct {
 	API influxdb2.WriteApiBlocking
 }
 
-func New(url, token string) *InfluxDBAdapter {
+func New(url, token string) *InfluxDB2Adapter {
 	client := influxdb2.NewClient(url, token)
 	defer client.Close()
 
 	api := client.WriteApiBlocking("influxdata", "default")
 
-	return &InfluxDBAdapter{api}
+	return &InfluxDB2Adapter{api}
 }
 
-func (a *InfluxDBAdapter) Save(m *ruuvi.Measurement) error {
+func (a *InfluxDB2Adapter) Save(m *ruuvi.Measurement) error {
 	for _, tag := range m.Tags {
 		tags := make(map[string]string)
 		tags["mac"] = tag.ID
