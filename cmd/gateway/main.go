@@ -1,7 +1,7 @@
 package main
 
 import (
-	"io/ioutil"
+	"fmt"
 	"net/http"
 	"os"
 
@@ -22,21 +22,9 @@ func main() {
 
 	adapter := influxdb2.New(url, token)
 
-	http.HandleFunc("/", handler(adapter))
-	http.ListenAndServe(":8080", nil)
-}
+	port := 8080
+	fmt.Printf("Server started on port %d\n", port)
 
-func handler(adapter ruuvi.DatabaseAdapter) http.HandlerFunc {
-	return func(w http.ResponseWriter, req *http.Request) {
-		b, _ := ioutil.ReadAll(req.Body)
-		m, err := ruuvi.Parse(b)
-		if err != nil {
-			panic(err)
-		}
-		// fmt.Printf("%+v", m)
-
-		if err := adapter.Save(m); err != nil {
-			panic(err)
-		}
-	}
+	http.HandleFunc("/", ruuvi.Handler(adapter))
+	http.ListenAndServe(fmt.Sprintf(":%d", port), nil)
 }
