@@ -24,6 +24,11 @@ func Handler(adapter DatabaseAdapter) http.HandlerFunc {
 		b, _ := ioutil.ReadAll(req.Body)
 
 		m, err := Parse(b)
+		if err != nil {
+			fmt.Println("Request rejected: malformed payload")
+			w.WriteHeader(http.StatusBadRequest)
+			return
+		}
 
 		if len(whitelist) > 0 {
 			if _, ok := whitelist[m.DeviceID]; !ok {
@@ -34,10 +39,6 @@ func Handler(adapter DatabaseAdapter) http.HandlerFunc {
 		}
 
 		fmt.Printf("Device %s: received %d tags\n", m.DeviceID, len(m.Tags))
-
-		if err != nil {
-			panic(err)
-		}
 
 		if err := adapter.Save(m); err != nil {
 			panic(err)

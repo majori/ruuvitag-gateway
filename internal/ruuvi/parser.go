@@ -41,8 +41,7 @@ type Measurement struct {
 func Parse(b []byte) (*Measurement, error) {
 	m := &Measurement{}
 
-	err := json.Unmarshal(b, m)
-	if err != nil {
+	if err := json.Unmarshal(b, m); err != nil {
 		return nil, err
 	}
 
