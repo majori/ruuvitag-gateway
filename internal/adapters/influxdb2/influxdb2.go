@@ -13,11 +13,11 @@ type InfluxDB2Adapter struct {
 	API influxdb2.WriteApiBlocking
 }
 
-func New(url, token string) *InfluxDB2Adapter {
+func New(url, token, organization, bucket string) *InfluxDB2Adapter {
 	client := influxdb2.NewClient(url, token)
 	defer client.Close()
 
-	api := client.WriteApiBlocking("influxdata", "default")
+	api := client.WriteApiBlocking(organization, bucket)
 
 	return &InfluxDB2Adapter{api}
 }

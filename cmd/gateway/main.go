@@ -20,7 +20,17 @@ func main() {
 		panic(`"INFLUXDB_TOKEN" missing`)
 	}
 
-	adapter := influxdb2.New(url, token)
+	org := os.Getenv("INFLUXDB_ORGANIZATION")
+	if org == "" {
+		fmt.Println("Warning: INFLUXDB_ORGANIZATION environment variable is missing")
+	}
+
+	bucket := os.Getenv("INFLUXDB_BUCKET")
+	if bucket == "" {
+		fmt.Println("Warning: INFLUXDB_BUCKET environment variable is missing")
+	}
+
+	adapter := influxdb2.New(url, token, org, bucket)
 
 	port := 8080
 	fmt.Printf("Server started on port %d\n", port)
